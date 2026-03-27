@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  
+  <title>Signup - ASASports</title>
+</head>
+<body>
+
+<div class="auth-container">
+  <div class="auth-box">
+    <h2>Create Account</h2>
+
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Enter Email" required />
+      <input type="password" id="password" placeholder="Enter Password" required />
+
+      <button type="submit">Signup</button>
+
+      <button type="button" class="google-btn" id="googleSignup">
+        Continue with Google
+      </button>
+
+      <p id="errorMsg"></p>
+
+      <p>Already have an account? <a href="login.html">Login</a></p>
+    </form>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script src="firebase.js"></script>
+<script src="signup.js"></script>
+ <!-- new file -->
+
+</body>
+</html>
+
+<style>
+  /* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BODY */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CARD CONTAINER */
+.auth-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+}
+
+.auth-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  padding: 30px;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* HEADING */
+.auth-box h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* INPUTS */
+.auth-box input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.auth-box input::placeholder {
+  color: #ccc;
+}
+
+/* BUTTON */
+.auth-box button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #0f87c4;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-box button:hover {
+  background: #0c6fa0;
+}
+
+/* GOOGLE BUTTON */
+.google-btn {
+  background: #fff;
+  color: #000;
+  margin-top: 10px;
+}
+
+.google-btn:hover {
+  background: #ddd;
+}
+
+/* TEXT */
+.auth-box p {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.auth-box a {
+  color: #0f87c4;
+  text-decoration: none;
+}
+
+/* ERROR */
+#errorMsg {
+  color: #ff4d4d;
+  font-size: 14px;
+  text-align: center;
+}
+</style>
