@@ -1,2 +1,406 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <link rel="stylesheet" href="style.css" /> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/> <title>ASASports</title> </head> <body> <!-- Navbar Start --> <nav class="navbar"> <div class="logo"><img src="image/logo (copy).png" alt="logo" /></div> <ul class="nav-links"> <li><a href="#">Company Information</a></li> <li><a href="#">About Us</a></li> <li><a href="#">Our Services</a></li> <li><a href="#">Bulk Production</a></li> <li><a href="#">All Embellishment</a></li> <li><a href="#">Custom Branding</a></li> <li><a href="login.html" class="authBtn">Login</a></li>
-<li><a href="signup.html" class="authBtn">Signup</a></li> <li><a href="#" id="logoutBtn" class="authBtn" style="display:none;">Logout</a></li> </ul> <div class="hamburger"> <span></span> <span></span> <span></span> </div> </nav> <!-- Navbar End --> <!-- Marquee Start --> <div class="marquee"> <div class="marquee-content"> 🚨 Welcome to ASASports! | Premium Sportswear • Custom Branding • Bulk Orders Available • Fast Worldwide Delivery 🚚 </div> </div> <!-- Marquee End --> <!-- Carousel Section Start --> <section class="carousel-section"> <div class="carousel-container"> <div class="carousel-slide"> <img src="image/carousel/1.jfif" alt="Slide 1"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/3.jfif" alt="Slide 4"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/4.jfif" alt="Slide 5"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/4 (1).jfif" alt="Slide 6"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/5.jfif" alt="Slide 7"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/6.jfif" alt="Slide 8"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/7.jfif" alt="Slide 9"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/8.jfif" alt="Slide 10"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/9.jfif" alt="Slide 11"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/10.jfif" alt="Slide 12"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/11.jfif" alt="Slide 13"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/12.jfif" alt="Slide 14"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/13.jfif" alt="Slide 15"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/14.jfif" alt="Slide 16"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/15.jfif" alt="Slide 17"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/16.jfif" alt="Slide 18"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/17.jfif" alt="Slide 19"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> <div class="carousel-slide"> <img src="image/carousel/18.jfif" alt="Slide 20"> <h2 class="carousel-heading">NEW ARRIVAL</h2> </div> </div> </section> <!-- Carousel Section End --> <!-- Company Information Section --> <section class="company-info"> <div class="info-box"> <!-- Text Column --> <div class="text"> <h1>Company Information</h1> <p> ASASports is a leading provider of sportswear and custom branding solutions. We specialize in bulk production, embellishments, and innovative designs for our clients worldwide. Our mission is to deliver high-quality, durable, and stylish sports apparel that meets the diverse needs of athletes, teams, and organizations. </p> <p> With years of experience in the industry, we combine modern manufacturing techniques with creative design to provide tailor-made solutions. From custom logos to intricate embroidery, ASASports ensures every product reflects the client’s brand identity. We take pride in maintaining strict quality control and timely delivery for all our projects. </p> <p> Customer satisfaction is at the heart of our operations. Our dedicated team works closely with clients to understand their requirements and provide personalized recommendations. Whether it’s large-scale bulk production or unique custom branding, ASASports is committed to excellence, innovation, and building lasting partnerships. </p> </div> </div> </section> <!-- Dashboard Section --> <section class="dashboard" style="display:none;"> <h2>Welcome, <span id="userEmail"></span>!</h2> <div class="add-product"> <input type="text" id="productInput" placeholder="Enter product name" /> <button id="addProductBtn">Add Product</button> </div> <ul id="productList"></ul> </section> <!-- Authentication Modal --> <div id="authModal" class="modal" style="display:none;"> <div class="modal-content"> <span class="closeBtn">&times;</span> <h2 id="modalTitle">Login</h2> <form id="authForm"> <input type="email" id="email" placeholder="Email" required /> <input type="password" id="password" placeholder="Password" required /> <button type="submit" id="authSubmit">Login</button> </form> <p id="authError" style="color:red;"></p> </div> </div> <!-- Product List --> <h2>Our Products</h2> <ul id="productList"> <!-- Row 1 --> <li class="product-card"> <div class="product-image"><img src="image/carousel/13.jfif" alt="Product 1"></div> <h3 class="product-name">Product 1</h3> <p class="product-desc">Printed Tee's</p> <button class="add-to-cart">Add to Cart</button> </li> <li class="product-card"> <div class="product-image"><img src="image/carousel/17.jfif" alt="Product 2"></div> <h3 class="product-name">Product 2</h3> <p class="product-desc">Printed Tee's</p> <button class="add-to-cart">Add to Cart</button> </li> <li class="product-card"> <div class="product-image"><img src="image/carousel/18.jfif" alt="Product 3"></div> <h3 class="product-name">Product 3</h3> <p class="product-desc">Basic Tee's</p> <button class="add-to-cart">Add to Cart</button> </li> <!-- Row 2 --> <li class="product-card"> <div class="product-image"><img src="image/carousel/3.jfif" alt="Product 4"></div> <h3 class="product-name">Product 4</h3> <p class="product-desc">Leather Jacket For Men</p> <button class="add-to-cart">Add to Cart</button> </li> <li class="product-card"> <div class="product-image"><img src="image/carousel/6.jfif" alt="Product 5"></div> <h3 class="product-name">Product 5</h3> <p class="product-desc">Colorful Caps</p> <button class="add-to-cart">Add to Cart</button> </li> <li class="product-card"> <div class="product-image"><img src="image/carousel/4.jfif" alt="Product 6"></div> <h3 class="product-name">Product 6</h3> <p class="product-desc">Leather Jackets For Women</p> <button class="add-to-cart">Add to Cart</button> </li> </ul> <!-- Footer Start --> <footer class="footer"> <div class="footer-container"> <!-- About / Company Info --> <div class="footer-box"> <h3>About ASASports</h3> <p>Leading provider of premium sportswear & custom branding solutions. Bulk production, embellishments, and worldwide delivery.</p> </div> <!-- Quick Links --> <div class="footer-box"> <h3>Quick Links</h3> <ul> <li><a href="#">Company Information</a></li> <li><a href="#">About Us</a></li> <li><a href="#">Our Services</a></li> <li><a href="#">Bulk Production</a></li> <li><a href="#">All Embellishment</a></li> <li><a href="#">Custom Branding</a></li> </ul> </div> <!-- Contact --> <div class="footer-box"> <h3>Contact</h3> <p>Email: info@asasports.com</p> <p>Phone: +92 300 1234567</p> <p>Address: Karachi, Pakistan</p> </div> <!-- Social Media --> <div class="footer-box"> <h3>Follow Us</h3> <div class="social-icons"> <a href="#"><i class="fab fa-facebook-f"></i></a> <a href="#"><i class="fab fa-instagram"></i></a> <a href="#"><i class="fab fa-twitter"></i></a> <a href="#"><i class="fab fa-linkedin-in"></i></a> </div> </div> </div> <div class="footer-bottom"> <p>© 2026 ASASports. All rights reserved.</p> </div> </footer> <!-- Footer End --> Firebase Scripts <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script> <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script> <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script> <script src="script.js"></script> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <title>ASASports</title>
+  <style>
+
+    /* ── CART ICON ── */
+    #cartIconBtn {
+      position: relative; background: none; border: none;
+      cursor: pointer; color: #fff; font-size: 20px;
+      padding: 4px 8px; display: flex; align-items: center; transition: color 0.2s;
+    }
+    #cartIconBtn:hover { color: #0f87c4; }
+    #cartBadge {
+      position: absolute; top: -4px; right: -6px;
+      background: #e63946; color: #fff; font-size: 10px; font-weight: 700;
+      min-width: 18px; height: 18px; border-radius: 99px;
+      display: flex; align-items: center; justify-content: center; padding: 0 4px;
+    }
+
+    /* ── PRODUCT CARD ACTIONS ── */
+    .card-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      justify-content: center; margin-top: 10px;
+    }
+    .add-to-cart {
+      background-color: #0f87c4; color: white;
+      padding: 8px 14px; border: none; border-radius: 5px;
+      cursor: pointer; font-weight: 500; font-size: 13px;
+      transition: background 0.3s; display: flex; align-items: center; gap: 6px;
+    }
+    .add-to-cart:hover { background-color: #0c6fa0; }
+
+    .delete-product-btn {
+      background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;
+      padding: 8px 12px; border-radius: 5px; cursor: pointer;
+      font-size: 13px; font-weight: 500; transition: background 0.2s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .delete-product-btn:hover { background: #fee2e2; }
+
+    /* ── SECTION DIVIDER ── */
+    .products-divider {
+      text-align: center; margin: 50px 0 10px;
+      font-size: 28px; color: #333; font-weight: 700;
+    }
+    .products-sub {
+      text-align: center; color: #888; font-size: 14px; margin-bottom: 30px;
+    }
+
+    /* ── SKELETON ── */
+    .skeleton-card {
+      background: #fff !important; border-radius: 10px;
+      padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); list-style: none;
+    }
+    .skeleton-img {
+      width: 100%; height: 150px; border-radius: 8px; margin-bottom: 12px;
+      background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+      background-size: 200% 100%; animation: shimmer 1.2s infinite;
+    }
+    .skeleton-line {
+      height: 14px; border-radius: 6px; margin-bottom: 8px;
+      background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
+      background-size: 200% 100%; animation: shimmer 1.2s infinite;
+    }
+    .skeleton-line.short { width: 60%; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    .no-products-msg {
+      grid-column: 1/-1; text-align: center;
+      padding: 40px 20px; color: #9ca3af; list-style: none;
+    }
+    .no-products-msg i { font-size: 40px; display: block; margin-bottom: 12px; color: #d1d5db; }
+
+    /* ══════════════════════════════════════
+       CART POPUP
+    ══════════════════════════════════════ */
+    #cartPopup {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+    .cart-popup-inner {
+      background: #fff; border-radius: 14px; padding: 20px 22px;
+      width: 340px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); border: 1px solid #e5e7eb;
+    }
+    .cart-popup-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 15px; font-weight: 700; margin-bottom: 10px; color: #111;
+    }
+    .popup-close-btn { background:none;border:none;font-size:22px;cursor:pointer;color:#9ca3af;line-height:1; }
+    .popup-close-btn:hover { color:#111; }
+    .cart-popup-item  { font-size:14px;color:#111;margin-bottom:2px; }
+    .cart-popup-price { font-size:13px;color:#0f87c4;font-weight:600;margin-bottom:10px; }
+    .popup-item-row {
+      display:flex;align-items:center;gap:8px;
+      padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:13px;
+    }
+    .popup-item-name  { flex:1;font-weight:500;color:#111;font-size:12px; }
+    .popup-item-total { font-weight:700;color:#0f87c4;font-size:12px;white-space:nowrap; }
+    .popup-qty-controls { display:flex;align-items:center;gap:4px; }
+    .qty-btn {
+      width:26px;height:26px;border-radius:5px;border:1px solid #d1d5db;
+      background:#f9fafb;font-size:15px;cursor:pointer;font-weight:700;
+      display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+    }
+    .qty-btn:hover { background:#0f87c4;color:#fff;border-color:#0f87c4; }
+    .qty-num { min-width:22px;text-align:center;font-weight:700;font-size:13px; }
+    .popup-remove-btn { background:none;border:none;color:#dc2626;cursor:pointer;font-size:14px;padding:2px 4px; }
+    .cart-popup-total { text-align:right;font-size:14px;color:#111;margin-top:10px;padding-top:8px;border-top:1px solid #f3f4f6; }
+    .cart-popup-btns  { display:flex;gap:8px;margin-top:12px; }
+    .popup-btn-continue {
+      flex:1;padding:9px;border:1.5px solid #d1d5db;border-radius:7px;
+      background:#fff;color:#6b7280;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;
+    }
+    .popup-btn-continue:hover { border-color:#0f87c4;color:#0f87c4; }
+    .popup-btn-cart {
+      flex:1;padding:9px;border:none;border-radius:7px;background:#0f87c4;
+      color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.2s;
+      display:flex;align-items:center;justify-content:center;gap:6px;
+    }
+    .popup-btn-cart:hover { background:#0c6fa0; }
+
+    /* ══════════════════════════════════════
+       CART DRAWER
+    ══════════════════════════════════════ */
+    #cartDrawer { position:fixed;inset:0;z-index:10000; }
+    .drawer-overlay { position:absolute;inset:0;background:rgba(0,0,0,0.45);animation:fadeIn 0.25s; }
+    @keyframes fadeIn { from{opacity:0;}to{opacity:1;} }
+    .drawer-panel {
+      position:absolute;top:0;right:0;bottom:0;width:420px;max-width:95vw;
+      background:#fff;display:flex;flex-direction:column;
+      box-shadow:-4px 0 30px rgba(0,0,0,0.15);animation:slideIn 0.3s ease;
+    }
+    @keyframes slideIn { from{transform:translateX(100%);}to{transform:translateX(0);} }
+    .drawer-header {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:20px 24px;border-bottom:1px solid #e5e7eb;background:#000;
+    }
+    .drawer-header h3 { color:#fff;font-size:18px;display:flex;align-items:center;gap:10px; }
+    .drawer-close { background:none;border:none;color:#fff;font-size:26px;cursor:pointer;line-height:1; }
+    .drawer-body  { flex:1;overflow-y:auto;padding:16px 20px; }
+    .drawer-empty { text-align:center;padding:60px 20px;color:#9ca3af; }
+    .drawer-empty i { font-size:48px;display:block;margin-bottom:14px;color:#d1d5db; }
+    .drawer-item {
+      display:flex;align-items:flex-start;gap:14px;
+      padding:14px 0;border-bottom:1px solid #f3f4f6;
+    }
+    .drawer-item img {
+      width:64px;height:64px;border-radius:8px;
+      object-fit:cover;border:1px solid #e5e7eb;flex-shrink:0;
+    }
+    .drawer-item-info  { flex:1; }
+    .drawer-item-name  { font-size:14px;font-weight:700;color:#111;margin-bottom:3px; }
+    .drawer-item-price { font-size:12px;color:#6b7280;margin-bottom:8px; }
+    .drawer-qty-row    { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+    .drawer-remove-btn {
+      background:#fef2f2;color:#dc2626;border:1px solid #fecaca;
+      padding:4px 10px;border-radius:5px;font-size:12px;cursor:pointer;
+      transition:background 0.2s;margin-left:4px;
+    }
+    .drawer-remove-btn:hover { background:#fee2e2; }
+    .drawer-item-subtotal { font-size:14px;font-weight:800;color:#0f87c4;white-space:nowrap;padding-top:4px; }
+    .drawer-footer { padding:16px 20px;border-top:1px solid #e5e7eb;background:#fafafa; }
+    .drawer-summary { margin-bottom:14px; }
+    .drawer-summary-row { display:flex;justify-content:space-between;font-size:14px;color:#6b7280;margin-bottom:6px; }
+    .total-row { font-size:17px;font-weight:800;color:#111;margin-top:8px;border-top:1px solid #e5e7eb;padding-top:10px; }
+    .drawer-checkout-btn {
+      width:100%;padding:13px;background:#0f87c4;color:#fff;border:none;
+      border-radius:9px;font-size:15px;font-weight:700;cursor:pointer;
+      margin-bottom:8px;transition:background 0.2s;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .drawer-checkout-btn:hover { background:#0c6fa0; }
+    .drawer-clear-btn {
+      width:100%;padding:10px;background:#fff;color:#dc2626;
+      border:1.5px solid #fecaca;border-radius:9px;font-size:13px;
+      font-weight:600;cursor:pointer;transition:all 0.2s;
+    }
+    .drawer-clear-btn:hover { background:#fef2f2; }
+
+    @media(max-width:480px){
+      .cart-popup-inner{width:calc(100vw - 32px);}
+      #cartPopup{left:16px;right:16px;bottom:16px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="logo"><img src="image/logo (copy).png" alt="logo" /></div>
+  <ul class="nav-links">
+    <li><a href="#">Company Information</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Our Services</a></li>
+    <li><a href="#">Bulk Production</a></li>
+    <li><a href="#">All Embellishment</a></li>
+    <li><a href="#">Custom Branding</a></li>
+    <li><a href="login.html"  class="authBtn" id="loginLink">Login</a></li>
+    <li><a href="signup.html" class="authBtn" id="signupLink">Signup</a></li>
+    <li><a href="dashboard.html" class="authBtn" id="dashboardLink" style="display:none;background:#0f87c4;color:#fff;padding:6px 14px;border-radius:6px;">Dashboard</a></li>
+    <li><a href="#" class="authBtn" id="logoutBtn" style="display:none;">Logout</a></li>
+    <li>
+      <button id="cartIconBtn" title="View Cart">
+        <i class="fa fa-shopping-cart"></i>
+        <span id="cartBadge"></span>
+      </button>
+    </li>
+  </ul>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     MARQUEE
+══════════════════════════════════════ -->
+<div class="marquee">
+  <div class="marquee-content">
+    🚨 Welcome to ASASports! | Premium Sportswear • Custom Branding • Bulk Orders Available • Fast Worldwide Delivery 🚚
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CAROUSEL
+══════════════════════════════════════ -->
+<section class="carousel-section">
+  <div class="carousel-container">
+    <div class="carousel-slide"><img src="image/carousel/1.jfif"     alt="Slide 1"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/3.jfif"     alt="Slide 2"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/4.jfif"     alt="Slide 3"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/4 (1).jfif" alt="Slide 4"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/5.jfif"     alt="Slide 5"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/6.jfif"     alt="Slide 6"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/7.jfif"     alt="Slide 7"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/8.jfif"     alt="Slide 8"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/9.jfif"     alt="Slide 9"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/10.jfif"    alt="Slide 10"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/11.jfif"    alt="Slide 11"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/12.jfif"    alt="Slide 12"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/13.jfif"    alt="Slide 13"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/14.jfif"    alt="Slide 14"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/15.jfif"    alt="Slide 15"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/16.jfif"    alt="Slide 16"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/17.jfif"    alt="Slide 17"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+    <div class="carousel-slide"><img src="image/carousel/18.jfif"    alt="Slide 18"><h2 class="carousel-heading">NEW ARRIVAL</h2></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     COMPANY INFO
+══════════════════════════════════════ -->
+<section class="company-info">
+  <div class="info-box">
+    <div class="text">
+      <h1>Company Information</h1>
+      <p>ASASports is a leading provider of sportswear and custom branding solutions. We specialize in bulk production, embellishments, and innovative designs for our clients worldwide. Our mission is to deliver high-quality, durable, and stylish sports apparel that meets the diverse needs of athletes, teams, and organizations.</p>
+      <p>With years of experience in the industry, we combine modern manufacturing techniques with creative design to provide tailor-made solutions. From custom logos to intricate embroidery, ASASports ensures every product reflects the client's brand identity.</p>
+      <p>Customer satisfaction is at the heart of our operations. Our dedicated team works closely with clients to understand their requirements and provide personalized recommendations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     OUR PRODUCTS — 6 HARDCODED CARDS
+     (Issue 4: restored exactly as original)
+══════════════════════════════════════ -->
+<h2>Our Products</h2>
+<ul id="productList">
+
+  <!-- ── Original 6 cards (always visible) ── -->
+  <li class="product-card static-card">
+    <div class="product-image"><img src="image/carousel/13.jfif" alt="Product 1"></div>
+    <h3 class="product-name">Product 1</h3>
+    <p class="product-desc">Printed Tee's</p>
+    <div class="card-actions">
+      <button class="add-to-cart"
+        data-name="Product 1 - Printed Tee's"
+        data-price="0"
+        data-img="image/carousel/13.jfif">
+        <i class="fa fa-cart-plus"></i> Add to Cart
+      </button>
+    </div>
+  </li>
+
+  <li class="product-card static-card">
+    <div class="product-image"><img src="image/carousel/17.jfif" alt="Product 2"></div>
+    <h3 class="product-name">Product 2</h3>
+    <p class="product-desc">Printed Tee's</p>
+    <div class="card-actions">
+      <button class="add-to-cart"
+        data-name="Product 2 - Printed Tee's"
+        data-price="0"
+        data-img="image/carousel/17.jfif">
+        <i class="fa fa-cart-plus"></i> Add to Cart
+      </button>
+    </div>
+  </li>
+
+  <li class="product-card static-card">
+    <div class="product-image"><img src="image/carousel/18.jfif" alt="Product 3"></div>
+    <h3 class="product-name">Product 3</h3>
+    <p class="product-desc">Basic Tee's</p>
+    <div class="card-actions">
+      <button class="add-to-cart"
+        data-name="Product 3 - Basic Tee's"
+        data-price="0"
+        data-img="image/carousel/18.jfif">
+        <i class="fa fa-cart-plus"></i> Add to Cart
+      </button>
+    </div>
+  </li>
+
+  <li class="product-card static-card">
+    <div class="product-image"><img src="image/carousel/3.jfif" alt="Product 4"></div>
+    <h3 class="product-name">Product 4</h3>
+    <p class="product-desc">Leather Jacket For Men</p>
+    <div class="card-actions">
+      <button class="add-to-cart"
+        data-name="Product 4 - Leather Jacket For Men"
+        data-price="0"
+        data-img="image/carousel/3.jfif">
+        <i class="fa fa-cart-plus"></i> Add to Cart
+      </button>
+    </div>
+  </li>
+
+  <li class="product-card static-card">
+    <div class="product-image"><img src="image/carousel/6.jfif" alt="Product 5"></div>
+    <h3 class="product-name">Product 5</h3>
+    <p class="product-desc">Colorful Caps</p>
+    <div class="card-actions">
+      <button class="add-to-cart"
+        data-name="Product 5 - Colorful Caps"
+        data-price="0"
+        data-img="image/carousel/6.jfif">
+        <i class="fa fa-cart-plus"></i> Add to Cart
+      </button>
+    </div>
+  </li>
+
+  <li class="product-card static-card">
+    <div class="product-image"><img src="image/carousel/4.jfif" alt="Product 6"></div>
+    <h3 class="product-name">Product 6</h3>
+    <p class="product-desc">Leather Jackets For Women</p>
+    <div class="card-actions">
+      <button class="add-to-cart"
+        data-name="Product 6 - Leather Jackets For Women"
+        data-price="0"
+        data-img="image/carousel/4.jfif">
+        <i class="fa fa-cart-plus"></i> Add to Cart
+      </button>
+    </div>
+  </li>
+
+  <!-- ── Firebase products injected here by script.js ── -->
+
+</ul>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-box">
+      <h3>About ASASports</h3>
+      <p>Leading provider of premium sportswear & custom branding solutions.</p>
+    </div>
+    <div class="footer-box">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#">Company Information</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Services</a></li>
+        <li><a href="#">Bulk Production</a></li>
+        <li><a href="#">All Embellishment</a></li>
+        <li><a href="#">Custom Branding</a></li>
+      </ul>
+    </div>
+    <div class="footer-box">
+      <h3>Contact</h3>
+      <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5bcbbb3ba95b4a6b4a6a5baa7a1a6fbb6bab8">[email&#160;protected]</a></p>
+      <p>Phone: +92 300 1234567</p>
+      <p>Address: Karachi, Pakistan</p>
+    </div>
+    <div class="footer-box">
+      <h3>Follow Us</h3>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 ASASports. All rights reserved.</p></div>
+</footer>
+
+<!-- Firebase SDKs -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/fireb

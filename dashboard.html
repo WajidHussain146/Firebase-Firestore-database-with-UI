@@ -1,6 +1,250 @@
-<h2>Welcome, <span id="userEmail"></span>!</h2>
-<button id="logoutBtn">Logout</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - ASASports</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; min-height: 100vh; }
 
+    /* ── NAVBAR ── */
+    .dash-nav {
+      background: #000; padding: 0 32px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .dash-nav .logo { font-size: 20px; font-weight: 700; color: #0f87c4; letter-spacing: 1px; }
+
+    .nav-user { display: flex; align-items: center; gap: 12px; }
+
+    .nav-email {
+      color: #ccc; font-size: 14px; background: rgba(255,255,255,0.08);
+      padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+      max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* Home button */
+    .btn-home {
+      padding: 8px 16px; background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.3); color: #fff;
+      border-radius: 6px; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-home:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+    #logoutBtn {
+      padding: 8px 18px; background: transparent;
+      border: 1.5px solid #0f87c4; color: #0f87c4;
+      border-radius: 6px; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    #logoutBtn:hover { background: #0f87c4; color: #fff; }
+
+    /* ── PAGE ── */
+    .page { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+
+    /* ── WELCOME CARD ── */
+    .welcome-card {
+      background: linear-gradient(135deg, #0f87c4, #0c6fa0);
+      border-radius: 14px; padding: 28px 32px; color: #fff;
+      margin-bottom: 32px; display: flex;
+      justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px; box-shadow: 0 4px 20px rgba(15,135,196,0.3);
+    }
+    .welcome-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .welcome-card p  { font-size: 13px; opacity: 0.8; }
+    .stat-badge {
+      background: rgba(255,255,255,0.15); border-radius: 10px;
+      padding: 14px 22px; text-align: center; border: 1px solid rgba(255,255,255,0.2);
+    }
+    .stat-badge .num   { font-size: 28px; font-weight: 800; display: block; }
+    .stat-badge .label { font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff; border-radius: 14px; padding: 28px;
+      margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); border: 1px solid #e5e7eb;
+    }
+    .card h3 { font-size: 17px; font-weight: 700; color: #111; margin-bottom: 20px; }
+
+    /* ── FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #6b7280;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="number"] {
+      padding: 11px 14px; border: 1.5px solid #d1d5db;
+      border-radius: 8px; font-size: 14px; color: #111;
+      outline: none; background: #fafafa; transition: border 0.2s;
+    }
+    .form-group input:focus { border-color: #0f87c4; background: #fff; }
+
+    /* ── UPLOAD AREA ── */
+    .upload-area {
+      border: 2px dashed #d1d5db; border-radius: 10px;
+      padding: 28px 16px; text-align: center; cursor: pointer;
+      transition: all 0.2s; background: #fafafa;
+    }
+    .upload-area:hover { border-color: #0f87c4; background: #f0f9ff; }
+    .upload-area i    { font-size: 32px; color: #9ca3af; display: block; margin-bottom: 8px; }
+    .upload-area span { font-size: 14px; color: #374151; font-weight: 500; display: block; }
+    .upload-area small{ font-size: 12px; color: #9ca3af; margin-top: 4px; display: block; }
+    #productImage { display: none; }
+    #imagePreview {
+      display: none; width: 100%; max-height: 180px;
+      object-fit: cover; border-radius: 8px; margin-top: 12px; border: 1px solid #e5e7eb;
+    }
+    .change-img-btn {
+      display: none; margin-top: 8px; background: none;
+      border: 1px solid #d1d5db; padding: 5px 14px;
+      border-radius: 6px; font-size: 12px; color: #6b7280; cursor: pointer; transition: all 0.2s;
+    }
+    .change-img-btn:hover { border-color: #0f87c4; color: #0f87c4; }
+
+    /* ── PROGRESS ── */
+    .progress-wrap { display: none; margin-top: 14px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: #0f87c4; border-radius: 99px; width: 0%; transition: width 0.3s; }
+    .progress-text { font-size: 12px; color: #6b7280; margin-top: 5px; text-align: right; }
+
+    /* ── SUBMIT ── */
+    #addProductBtn {
+      width: 100%; padding: 13px; background: #0f87c4; color: #fff;
+      border: none; border-radius: 8px; font-weight: 700; font-size: 15px;
+      cursor: pointer; margin-top: 8px; transition: background 0.2s, opacity 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    #addProductBtn:hover:not(:disabled) { background: #0c6fa0; }
+    #addProductBtn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* ── ALERTS ── */
+    .product-alert {
+      display: none; margin-top: 14px; padding: 12px 16px;
+      border-radius: 8px; font-size: 14px; font-weight: 500;
+    }
+    .product-alert.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .product-alert.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+    .db-product-card {
+      background: #f9fafb; border: 1px solid #e5e7eb;
+      border-radius: 12px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .db-product-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-3px); }
+    .db-product-card img { width: 100%; height: 150px; object-fit: cover; display: block; background: #e5e7eb; }
+    .db-product-info { padding: 12px 14px; }
+    .db-product-name { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .db-product-price { font-size: 15px; font-weight: 800; color: #0f87c4; margin-bottom: 10px; }
+    .db-delete-btn {
+      width: 100%; background: #fef2f2; color: #dc2626;
+      border: 1px solid #fecaca; padding: 7px; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .db-delete-btn:hover { background: #fee2e2; }
+    .empty-note { text-align: center; color: #9ca3af; font-size: 14px; padding: 40px 20px; grid-column: 1 / -1; }
+
+    @media (max-width: 600px) {
+      .dash-nav { padding: 0 16px; }
+      .nav-email { display: none; }
+      .welcome-card { flex-direction: column; }
+      .page { padding: 20px 12px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR with Home button -->
+<nav class="dash-nav">
+  <div class="logo">ASASports</div>
+  <div class="nav-user">
+    <span class="nav-email" id="userEmail">Loading...</span>
+    <!-- Go to Main Page button -->
+    <a href="index.html" class="btn-home">
+      <i class="fa fa-home"></i> Main Page
+    </a>
+    <button id="logoutBtn"><i class="fa fa-sign-out-alt"></i> Logout</button>
+  </div>
+</nav>
+
+<main class="page">
+
+  <div class="welcome-card">
+    <div>
+      <h2>Welcome, <span id="welcomeName">User</span>!</h2>
+      <p id="welcomeEmail"></p>
+    </div>
+    <div class="stat-badge">
+      <span class="num" id="productCount">0</span>
+      <span class="label">Products</span>
+    </div>
+  </div>
+
+  <!-- ADD PRODUCT — no setup info box -->
+  <div class="card">
+    <h3>➕ Add New Product</h3>
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label for="productName">Product Name *</label>
+        <input type="text" id="productName" placeholder="e.g. Printed T-Shirt" />
+      </div>
+
+      <div class="form-group">
+        <label for="productPrice">Price (PKR) *</label>
+        <input type="number" id="productPrice" placeholder="e.g. 1500" min="0" />
+      </div>
+
+      <div class="form-group full">
+        <label>Product Image * <small style="text-transform:none;font-weight:400;color:#9ca3af;">(max 1MB — JPG, PNG, WEBP)</small></label>
+        <div class="upload-area" id="uploadArea"
+             onclick="document.getElementById('productImage').click()">
+          <i class="fa fa-cloud-upload-alt"></i>
+          <span id="uploadText">Click here to select an image from your device</span>
+          <small id="uploadHint">Supports JPG, PNG, WEBP — max 1MB</small>
+        </div>
+        <input type="file" id="productImage" accept="image/*" />
+        <img id="imagePreview" alt="Preview" />
+        <button class="change-img-btn" id="changeImgBtn"
+                onclick="document.getElementById('productImage').click()">
+          <i class="fa fa-redo"></i> Change Image
+        </button>
+      </div>
+
+    </div>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+      <div class="progress-text" id="progressText">Saving...</div>
+    </div>
+
+    <button id="addProductBtn"><i class="fa fa-plus"></i> Add Product</button>
+    <div class="product-alert" id="productAlert"></div>
+  </div>
+
+  <div class="card">
+    <h3>📦 Your Products</h3>
+    <div class="product-grid" id="productGrid">
+      <div class="empty-note">Loading...</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Only 3 SDKs needed — no storage SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase.js"></script>
 <script src="dashboard.js"></script>
+
+</body>
+</html>
