@@ -1,8 +1,14 @@
 // ═══════════════════════════════════════════════════
-//  script.js  —  index.html
+//  script.js  —  Final fixed version
 // ═══════════════════════════════════════════════════
 
 window.addEventListener("load", function () {
+
+  // ── Safety check ──
+  if (typeof firebase === "undefined") {
+    console.error("Firebase not loaded.");
+    return;
+  }
 
   const auth = firebase.auth();
   const db   = firebase.database();
@@ -22,16 +28,40 @@ window.addEventListener("load", function () {
   }
 
   // ══════════════════════════════════════
-  //  CART ICON BUTTON
+  //  CART ICON
   // ══════════════════════════════════════
   updateCartIcon();
   document.getElementById("cartIconBtn")?.addEventListener("click", openCartDrawer);
+
+  // ══════════════════════════════════════
+  //  ADD TO CART — EVENT DELEGATION
+  //  Listens on the whole document so it
+  //  works for BOTH static AND firebase
+  //  cards, regardless of load timing.
+  // ══════════════════════════════════════
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest(".add-to-cart");
+    if (!btn) return;
+
+    // Static cards use data attributes
+    const dataName  = btn.getAttribute("data-name");
+    const dataPrice = btn.getAttribute("data-price");
+    const dataImg   = btn.getAttribute("data-img");
+
+    if (dataName) {
+      // Static card
+      addToCart(dataName, parseFloat(dataPrice) || 0, dataImg || "");
+    }
+    // Firebase card buttons are handled via closure in loadFirebaseProducts()
+    // so they call addToCart directly — this delegation handles static ones only
+  });
 
   // ══════════════════════════════════════
   //  AUTH STATE
   // ══════════════════════════════════════
   auth.onAuthStateChanged((user) => {
     currentUser = user;
+
     const loginLink     = document.getElementById("loginLink");
     const signupLink    = document.getElementById("signupLink");
     const logoutBtn     = document.getElementById("logoutBtn");
@@ -48,131 +78,113 @@ window.addEventListener("load", function () {
       if (logoutBtn)     logoutBtn.style.display     = "none";
       if (dashboardLink) dashboardLink.style.display = "none";
     }
-
-    // Re-render Firebase products so delete buttons update
-    loadFirebaseProducts();
   });
 
+  // Logout
   document.getElementById("logoutBtn")?.addEventListener("click", (e) => {
     e.preventDefault();
     auth.signOut().then(() => window.location.reload());
   });
 
   // ══════════════════════════════════════
-  //  STATIC CARD — Add to Cart buttons
-  //  (the original 6 hardcoded products)
+  //  FIREBASE PRODUCTS
+  //  Uses .on() for real-time updates.
+  //  Firebase cards appended after static 6.
   // ══════════════════════════════════════
-  attachCartButtons(document.querySelectorAll(".static-card .add-to-cart"));
-
-  // ══════════════════════════════════════
-  //  FIREBASE PRODUCTS — append after 6 cards
-  // ══════════════════════════════════════
-  // Remove any old firebase cards before re-rendering
-  let firebaseProductsLoaded = false;
+  const productList = document.getElementById("productList");
 
   function loadFirebaseProducts() {
-    // Remove previously injected firebase cards
-    document.querySelectorAll(".firebase-card").forEach(el => el.remove());
-    document.getElementById("firebase-loading")?.remove();
-    document.getElementById("firebase-empty")?.remove();
+    db.ref("products").on("value", (snapshot) => {
 
-    const productList = document.getElementById("productList");
-    if (!productList) return;
+      // Remove old firebase cards first
+      document.querySelectorAll(".firebase-card").forEach(el => el.remove());
 
-    // Show loading placeholder
-    const loadingLi = document.createElement("li");
-    loadingLi.id = "firebase-loading";
-    loadingLi.className = "skeleton-card product-card";
-    loadingLi.innerHTML = `<div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div>`;
-    productList.appendChild(loadingLi);
-
-    db.ref("products").once("value", (snapshot) => {
-      // Remove loading
-      document.getElementById("firebase-loading")?.remove();
-
-      if (!snapshot.exists()) return; // no firebase products — just show the 6 static ones
+      if (!snapshot.exists()) return;
 
       const all = [];
       snapshot.forEach((userSnap) => {
         userSnap.forEach((prodSnap) => {
-          all.push({ key: prodSnap.key, uid: userSnap.key, ...prodSnap.val() });
+          all.push({
+            key: prodSnap.key,
+            uid: userSnap.key,
+            ...prodSnap.val()
+          });
         });
       });
 
       if (all.length === 0) return;
 
-      // Sort newest first
+      // Newest first
       all.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
       all.forEach((p) => {
         const isOwner = currentUser && currentUser.uid === p.uid;
-        const deleteBtn = isOwner
-          ? `<button class="delete-product-btn" data-uid="${p.uid}" data-key="${p.key}">
-               <i class="fa fa-trash"></i> Remove
-             </button>`
-          : "";
 
         const li = document.createElement("li");
         li.className = "product-card firebase-card";
+
+        // Build card HTML — image src set separately (Base64 safe)
         li.innerHTML = `
           <div class="product-image">
-            <img src="${esc(p.imageURL || "")}" alt="${esc(p.name)}"
+            <img alt="${esc(p.name)}"
                  onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'" />
           </div>
           <h3 class="product-name">${esc(p.name)}</h3>
           <p class="product-desc">PKR ${Number(p.price || 0).toLocaleString()}</p>
           <div class="card-actions">
-            <button class="add-to-cart"
-              data-name="${esc(p.name)}"
-              data-price="${p.price || 0}"
-              data-img="${esc(p.imageURL || "")}">
+            <button class="firebase-cart-btn" type="button">
               <i class="fa fa-cart-plus"></i> Add to Cart
             </button>
-            ${deleteBtn}
+            ${isOwner
+              ? `<button class="firebase-delete-btn delete-product-btn" type="button">
+                   <i class="fa fa-trash"></i> Remove
+                 </button>`
+              : ""
+            }
           </div>`;
+
+        // Set image src directly — never put Base64 inside innerHTML
+        li.querySelector("img").src = p.imageURL || "";
+
+        // Cart button — direct closure, no data attributes needed
+        li.querySelector(".firebase-cart-btn").addEventListener("click", () => {
+          addToCart(p.name, parseFloat(p.price) || 0, p.imageURL || "");
+        });
+
+        // Delete button
+        const delBtn = li.querySelector(".firebase-delete-btn");
+        if (delBtn) {
+          delBtn.addEventListener("click", () => {
+            if (confirm('Remove "' + p.name + '" from the store?')) {
+              db.ref("products/" + p.uid + "/" + p.key)
+                .remove()
+                .catch(() => alert("Failed to delete. Try again."));
+            }
+          });
+        }
+
         productList.appendChild(li);
       });
 
-      // Attach cart buttons on new firebase cards
-      attachCartButtons(document.querySelectorAll(".firebase-card .add-to-cart"));
-
-      // Attach delete buttons
-      document.querySelectorAll(".firebase-card .delete-product-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const name = btn.closest("li").querySelector(".product-name").innerText;
-          if (confirm('Remove "' + name + '" from the store?')) {
-            db.ref("products/" + btn.dataset.uid + "/" + btn.dataset.key)
-              .remove()
-              .then(() => loadFirebaseProducts())  // refresh after delete
-              .catch(() => alert("Failed to delete."));
-          }
-        });
-      });
-
     }, (err) => {
-      document.getElementById("firebase-loading")?.remove();
-      console.warn("Firebase DB read error:", err.message);
+      console.error("Firebase read error:", err.code, err.message);
     });
   }
 
-  // ══════════════════════════════════════
-  //  ATTACH CART BUTTONS (reusable)
-  // ══════════════════════════════════════
-  function attachCartButtons(buttons) {
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        addToCart(btn.dataset.name, parseFloat(btn.dataset.price) || 0, btn.dataset.img || "");
-      });
-    });
-  }
+  // Start loading Firebase products
+  loadFirebaseProducts();
 
   // ══════════════════════════════════════
   //  ADD TO CART
   // ══════════════════════════════════════
   function addToCart(name, price, img) {
+    if (!name) return;
     const existing = cart.find((i) => i.name === name);
-    if (existing) { existing.qty += 1; }
-    else { cart.push({ name, price, img, qty: 1 }); }
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ name, price, img, qty: 1 });
+    }
     saveCart();
     showCartPopup(name, price);
   }
@@ -194,6 +206,7 @@ window.addEventListener("load", function () {
   // ══════════════════════════════════════
   function showCartPopup(name, price) {
     document.getElementById("cartPopup")?.remove();
+
     const popup = document.createElement("div");
     popup.id = "cartPopup";
     popup.innerHTML = `
@@ -218,7 +231,10 @@ window.addEventListener("load", function () {
 
     document.getElementById("popupCloseBtn").onclick    = closeCartPopup;
     document.getElementById("popupContinueBtn").onclick = closeCartPopup;
-    document.getElementById("popupViewCartBtn").onclick = () => { closeCartPopup(); openCartDrawer(); };
+    document.getElementById("popupViewCartBtn").onclick = () => {
+      closeCartPopup();
+      openCartDrawer();
+    };
 
     renderPopupItems();
     setTimeout(closeCartPopup, 7000);
@@ -227,7 +243,7 @@ window.addEventListener("load", function () {
   function renderPopupItems() {
     const container = document.getElementById("popupCartItems");
     const totalEl   = document.getElementById("popupTotal");
-    if (!container) return;
+    if (!container || !totalEl) return;
 
     container.innerHTML = cart.map((item) => `
       <div class="popup-item-row">
@@ -237,7 +253,9 @@ window.addEventListener("load", function () {
           <span class="qty-num">${item.qty}</span>
           <button class="qty-btn" onclick="window._pQty('${esc(item.name)}',1)">+</button>
         </div>
-        <span class="popup-item-total">${item.price > 0 ? "PKR " + Number(item.price * item.qty).toLocaleString() : "—"}</span>
+        <span class="popup-item-total">
+          ${item.price > 0 ? "PKR " + Number(item.price * item.qty).toLocaleString() : "—"}
+        </span>
         <button class="popup-remove-btn" onclick="window._pRemove('${esc(item.name)}')">
           <i class="fa fa-times"></i>
         </button>
@@ -246,7 +264,7 @@ window.addEventListener("load", function () {
     const grand = cart.reduce((s, i) => s + i.price * i.qty, 0);
     totalEl.innerHTML = grand > 0
       ? `<strong>Total: PKR ${Number(grand).toLocaleString()}</strong>`
-      : `<strong>${cart.reduce((s,i)=>s+i.qty,0)} item(s) in cart</strong>`;
+      : `<strong>${cart.reduce((s, i) => s + i.qty, 0)} item(s) in cart</strong>`;
   }
 
   window._pQty = (name, delta) => {
@@ -258,6 +276,7 @@ window.addEventListener("load", function () {
     if (cart.length === 0) { closeCartPopup(); return; }
     renderPopupItems();
   };
+
   window._pRemove = (name) => {
     cart = cart.filter(i => i.name !== name);
     saveCart();
@@ -265,13 +284,16 @@ window.addEventListener("load", function () {
     renderPopupItems();
   };
 
-  function closeCartPopup() { document.getElementById("cartPopup")?.remove(); }
+  function closeCartPopup() {
+    document.getElementById("cartPopup")?.remove();
+  }
 
   // ══════════════════════════════════════
   //  CART DRAWER
   // ══════════════════════════════════════
   function openCartDrawer() {
     document.getElementById("cartDrawer")?.remove();
+
     const drawer = document.createElement("div");
     drawer.id = "cartDrawer";
     drawer.innerHTML = `
@@ -281,10 +303,11 @@ window.addEventListener("load", function () {
           <h3><i class="fa fa-shopping-cart"></i> Your Cart</h3>
           <button class="drawer-close" id="drawerCloseBtn">&times;</button>
         </div>
-        <div class="drawer-body"  id="drawerBody"></div>
+        <div class="drawer-body" id="drawerBody"></div>
         <div class="drawer-footer" id="drawerFooter"></div>
       </div>`;
     document.body.appendChild(drawer);
+
     document.getElementById("drawerCloseBtn").onclick = closeCartDrawer;
     document.getElementById("drawerOverlay").onclick  = closeCartDrawer;
     renderDrawer();
@@ -301,31 +324,60 @@ window.addEventListener("load", function () {
       return;
     }
 
-    body.innerHTML = cart.map((item) => `
-      <div class="drawer-item">
-        <img src="${esc(item.img || "")}" alt="${esc(item.name)}"
-             onerror="this.src='https://via.placeholder.com/60x60?text=?'" />
-        <div class="drawer-item-info">
-          <div class="drawer-item-name">${esc(item.name)}</div>
-          <div class="drawer-item-price">${item.price > 0 ? "PKR " + Number(item.price).toLocaleString() + " / item" : "Price TBD"}</div>
-          <div class="drawer-qty-row">
-            <button class="qty-btn" onclick="window._dQty('${esc(item.name)}',-1)">−</button>
-            <span class="qty-num">${item.qty}</span>
-            <button class="qty-btn" onclick="window._dQty('${esc(item.name)}',1)">+</button>
-            <button class="drawer-remove-btn" onclick="window._dRemove('${esc(item.name)}')">
-              <i class="fa fa-trash"></i> Remove
-            </button>
-          </div>
+    body.innerHTML = "";
+
+    cart.forEach((item) => {
+      const div = document.createElement("div");
+      div.className = "drawer-item";
+
+      // Image — set src directly for Base64 safety
+      const img = document.createElement("img");
+      img.alt     = item.name;
+      img.onerror = () => { img.src = "https://via.placeholder.com/60x60?text=?"; };
+      img.src     = item.img || "";
+
+      const info = document.createElement("div");
+      info.className = "drawer-item-info";
+      info.innerHTML = `
+        <div class="drawer-item-name">${esc(item.name)}</div>
+        <div class="drawer-item-price">
+          ${item.price > 0 ? "PKR " + Number(item.price).toLocaleString() + " / item" : "Price TBD"}
         </div>
-        <div class="drawer-item-subtotal">${item.price > 0 ? "PKR " + Number(item.price * item.qty).toLocaleString() : "×" + item.qty}</div>
-      </div>`).join("");
+        <div class="drawer-qty-row">
+          <button class="qty-btn" onclick="window._dQty('${esc(item.name)}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="window._dQty('${esc(item.name)}',1)">+</button>
+          <button class="drawer-remove-btn" onclick="window._dRemove('${esc(item.name)}')">
+            <i class="fa fa-trash"></i> Remove
+          </button>
+        </div>`;
+
+      const subtotal = document.createElement("div");
+      subtotal.className   = "drawer-item-subtotal";
+      subtotal.textContent = item.price > 0
+        ? "PKR " + Number(item.price * item.qty).toLocaleString()
+        : "×" + item.qty;
+
+      div.appendChild(img);
+      div.appendChild(info);
+      div.appendChild(subtotal);
+      body.appendChild(div);
+    });
 
     const grand    = cart.reduce((s, i) => s + i.price * i.qty, 0);
     const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+
     footer.innerHTML = `
       <div class="drawer-summary">
-        <div class="drawer-summary-row"><span>Total Items</span><span>${totalQty}</span></div>
-        ${grand > 0 ? `<div class="drawer-summary-row total-row"><span>Grand Total</span><span>PKR ${Number(grand).toLocaleString()}</span></div>` : ""}
+        <div class="drawer-summary-row">
+          <span>Total Items</span><span>${totalQty}</span>
+        </div>
+        ${grand > 0
+          ? `<div class="drawer-summary-row total-row">
+               <span>Grand Total</span>
+               <span>PKR ${Number(grand).toLocaleString()}</span>
+             </div>`
+          : ""}
       </div>
       <button class="drawer-checkout-btn" onclick="alert('Checkout coming soon! 🚀')">
         <i class="fa fa-lock"></i> Proceed to Checkout
@@ -338,24 +390,35 @@ window.addEventListener("load", function () {
     if (!item) return;
     item.qty += delta;
     if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
-    saveCart(); renderDrawer();
+    saveCart();
+    renderDrawer();
   };
   window._dRemove = (name) => {
     cart = cart.filter(i => i.name !== name);
-    saveCart(); renderDrawer();
+    saveCart();
+    renderDrawer();
   };
   window._clearCart = () => {
-    if (confirm("Clear all items from cart?")) { cart = []; saveCart(); renderDrawer(); }
+    if (confirm("Clear all items from cart?")) {
+      cart = [];
+      saveCart();
+      renderDrawer();
+    }
   };
-  function closeCartDrawer() { document.getElementById("cartDrawer")?.remove(); }
+
+  function closeCartDrawer() {
+    document.getElementById("cartDrawer")?.remove();
+  }
 
   // ══════════════════════════════════════
-  //  HELPER
+  //  HELPER — text only, never images
   // ══════════════════════════════════════
   function esc(str) {
     return String(str || "")
-      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
 }); // end window.onload

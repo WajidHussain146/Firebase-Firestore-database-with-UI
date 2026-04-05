@@ -161,13 +161,15 @@ window.addEventListener("load", function () {
         const card = document.createElement("div");
         card.className = "db-product-card";
         card.innerHTML = `
-          <img src="${p.imageURL || ""}" alt="${esc(p.name)}"
+          <img alt="${esc(p.name)}"
                onerror="this.src='https://via.placeholder.com/200x150?text=No+Image'" />
           <div class="db-product-info">
             <div class="db-product-name" title="${esc(p.name)}">${esc(p.name)}</div>
             <div class="db-product-price">PKR ${Number(p.price).toLocaleString()}</div>
             <button class="db-delete-btn" data-key="${key}">🗑 Delete</button>
           </div>`;
+        // Set src directly — avoids Base64 being broken by innerHTML escaping
+        card.querySelector("img").src = p.imageURL || "";
         productGrid.appendChild(card);
       });
 

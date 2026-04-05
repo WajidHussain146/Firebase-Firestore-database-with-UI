@@ -34,6 +34,8 @@
       transition: background 0.3s; display: flex; align-items: center; gap: 6px;
     }
     .add-to-cart:hover { background-color: #0c6fa0; }
+    .firebase-cart-btn { background-color: #0f87c4; color: white; padding: 8px 14px; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; font-size: 13px; transition: background 0.3s; display: flex; align-items: center; gap: 6px; }
+    .firebase-cart-btn:hover { background-color: #0c6fa0; }
 
     .delete-product-btn {
       background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;
@@ -384,7 +386,7 @@
     </div>
     <div class="footer-box">
       <h3>Contact</h3>
-      <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5bcbbb3ba95b4a6b4a6a5baa7a1a6fbb6bab8">[email&#160;protected]</a></p>
+      <p>Email: info@asasports.com</p>
       <p>Phone: +92 300 1234567</p>
       <p>Address: Karachi, Pakistan</p>
     </div>
@@ -399,8 +401,13 @@
     </div>
   </div>
   <div class="footer-bottom"><p>© 2026 ASASports. All rights reserved.</p></div>
-</footer>
 
-<!-- Firebase SDKs -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/fireb
+<!-- Firebase SDKs — correct order, no Cloudflare scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
